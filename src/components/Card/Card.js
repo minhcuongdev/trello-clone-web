@@ -3,15 +3,21 @@ import './Card.scss'
 
 function Card(props) {
 
-    const { card } = props;
+    const { card } = props
 
     return (
-        <li className="card-item">
-            { card.cover && <img src={card.cover} className="card-cover"
-                alt="minhcuongdev-alt-img" />}
+        <div className="card-item">
+            {card.cover &&
+                <img
+                    src={card.cover}
+                    className="card-cover"
+                    alt="img"
+                    draggable = "false"
+                />
+            }
             {card.title}
-        </li>
+        </div>
     )
 }
 
-export default Card;
+export default Card
