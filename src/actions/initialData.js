@@ -16,9 +16,6 @@ export const initialData = {
                         { id: 'card-4', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 4', cover: null },
                         { id: 'card-5', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 5', cover: null },
                         { id: 'card-6', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 6', cover: null },
-                        { id: 'card-7', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 7', cover: null },
-                        { id: 'card-7', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 7', cover: null },
-                        { id: 'card-7', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 7', cover: null },
                         { id: 'card-7', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 7', cover: null }
                     ]
                 },

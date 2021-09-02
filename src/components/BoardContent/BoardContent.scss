@@ -1,6 +1,7 @@
 @import '_setting.scss';
 
 .board-content{
+    display: flex;
     height: $board-content-height;
     overflow-x: auto;
     overflow-y: hidden;
@@ -23,5 +24,24 @@
       background-color: rgba(150, 150, 200, 0.1);
       border: 1px dashed #abc;
       margin: 5px 45px 5px 5px;
+    }
+
+    .add-new-column {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      width: 250px;
+      height: 46px;
+      line-height: 46px;
+      padding: 4px 0 4px 15px;
+      cursor: pointer;
+      color: white;
+      margin-left: $gap;
+      font-size: 15px;
+      background-color: hsla(0, 0%, 100%, .24);
+      border-radius: $column-border-radius;
+      &:hover {
+        background-color: hsla(0, 0%, 100%, .34);
+      }
     }
 }
