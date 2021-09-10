@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
-import { Dropdown, Form } from 'react-bootstrap'
+import { Dropdown, Form, Button } from 'react-bootstrap'
+import { cloneDeep } from 'lodash'
 import './Column.scss'
 
 import Card from 'components/Card/Card'
@@ -9,6 +10,7 @@ import { mapOrder } from 'utilities/sorts'
 import { MODAL_ACTION_CONFIRM } from 'utilities/constants'
 import { saveContentAfterEnter, selectAllInlineText } from 'utilities/contentEditable'
 
+
 function Column(props) {
     const { column, onCardDrop, onUpdateColumn } = props
     const cards = mapOrder(column.cards, column.cardOrder, 'id')
@@ -16,6 +18,16 @@ function Column(props) {
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     const toggleShowConfirmModal = () => setShowConfirmModal(!showConfirmModal)
+
+    const [openNewCartForm, setOpenNewCartForm] = useState(false)
+    const toggleOpenNewCartForm = () => {
+        setOpenNewCartForm(!openNewCartForm)
+    }
+
+    const [newCartTile, setNewCartTitle] = useState('')
+    const onNewCartTitleChange = (e) => {
+        setNewCartTitle(e.target.value)
+    }
 
     const onConfirmModalAction = (type) => {
         if (type === MODAL_ACTION_CONFIRM) {
@@ -34,6 +46,14 @@ function Column(props) {
         setColumnTile(column.title)
     }, [column.title])
 
+    const newCartTextareaRef = useRef(null)
+    useEffect(() => {
+        if (newCartTextareaRef && newCartTextareaRef.current) {
+            newCartTextareaRef.current.focus()
+            newCartTextareaRef.current.select()
+        }
+    }, [openNewCartForm])
+
     const handleColumnTitleChange = (e) => {
         setColumnTile(e.target.value)
     }
@@ -44,6 +64,29 @@ function Column(props) {
             title: columnTitle
         }
         onUpdateColumn(newColumn)
+    }
+
+    const addNewCart = () => {
+        if (!newCartTile) {
+            newCartTextareaRef.current.focus()
+            return
+        }
+
+        const newCartToAdd = {
+            id: Math.random().toString(36).substr(2, 5),
+            boardID: column.boardID,
+            columnID: column.id,
+            title: newCartTile.trim(),
+            cover: null
+        }
+
+        const newColumn = cloneDeep(column)
+        newColumn.cards.push(newCartToAdd)
+        newColumn.cardOrder.push(newCartToAdd.id)
+
+        onUpdateColumn(newColumn)
+        setNewCartTitle('')
+        toggleOpenNewCartForm()
     }
 
     return (
@@ -68,7 +111,7 @@ function Column(props) {
                         <Dropdown.Toggle id="dropdown-basic" size="sm" className="dropdown-btn"></Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item>Add Cart</Dropdown.Item>
+                            <Dropdown.Item onClick={toggleOpenNewCartForm}>Add Cart</Dropdown.Item>
                             <Dropdown.Item onClick={toggleShowConfirmModal}>Remove Column</Dropdown.Item>
                             <Dropdown.Item>Move all cart in this column (beta)...</Dropdown.Item>
                             <Dropdown.Item>Active all cart in this column (beta)...</Dropdown.Item>
@@ -95,13 +138,38 @@ function Column(props) {
                             <Card card={card} />
                         </Draggable>
                     ))}
+                    {openNewCartForm &&
+                        <div className="add-new-cart-area">
+                            <Form.Control
+                                size="sm"
+                                as="textarea"
+                                rows="3"
+                                placeholder="Enter the title for this cart ..."
+                                className="textarea-enter-new-cart"
+                                ref={newCartTextareaRef}
+                                value={newCartTile}
+                                onChange={onNewCartTitleChange}
+                                onKeyDown={e => (e.key === 'Enter') && addNewCart()}
+                            />
+                        </div>
+                    }
                 </Container>
             </div>
             <footer>
-                <div className="footer-actions">
-                    <i className="icon fa fa-plus" />
-                    Add another card
-                </div>
+                {openNewCartForm &&
+                    <div className="add-new-cart-action">
+                        <Button variant="success" size="sm" onClick={addNewCart}>Add Cart</Button>
+                        <span className="cancel-icon" onClick={toggleOpenNewCartForm}>
+                            <i className='icon fa fa-trash'></i>
+                        </span>
+                    </div>
+                }
+                {!openNewCartForm &&
+                    <div className="footer-actions" onClick={toggleOpenNewCartForm}>
+                        <i className="icon fa fa-plus" />
+                        Add another card
+                    </div>
+                }
             </footer>
             <ConfirmModal
                 title="Remove Column"
