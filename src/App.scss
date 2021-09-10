@@ -42,6 +42,7 @@ body {
   [type=tel].form-control:focus, 
   [contenteditable].form-control:focus {
     box-shadow: none;
+    border: 1px solid $input-border-color;
   }
 
   .btn:focus, .btn:active{
@@ -58,8 +59,22 @@ body {
 
     &:focus {
       background-color: white;
-      border: 1px solid $input-border-color;
     }
+  }
+
+  span.cancel-icon {
+    margin-left: 15px;
+        cursor: pointer;
+        position: relative;
+        bottom: -3px;
+  
+        i {
+          font-size: 20px;
+          color: $alert-danger;
+          &:hover{
+            color: darken($alert-danger, $amount: 10);
+          }
+        }
   }
 }
 

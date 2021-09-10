@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Container, Draggable } from 'react-smooth-dnd'
 import { Container as BootstrapContainer, Row, Col, Form, Button } from 'react-bootstrap'
 import { isEmpty } from 'lodash'
@@ -14,13 +14,16 @@ function BoardContent() {
     const [board, setBoard] = useState({})
     const [columns, setColumns] = useState([])
     const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
+    const toggleOpenNewColumnForm = () => {
+        setOpenNewColumnForm(!openNewColumnForm)
+    }
 
     const newColumnInputRef = useRef(null)
 
     const [newColumnTile, setNewColumnTitle] = useState('')
-    const onNewColumnTitleChange = useCallback((e) => {
+    const onNewColumnTitleChange = (e) => {
         setNewColumnTitle(e.target.value)
-    }, [])
+    }
 
 
     useEffect(() => {
@@ -57,7 +60,6 @@ function BoardContent() {
 
     const onCardDrop = (columnID, dropResult) => {
         if (dropResult.addedIndex !== null || dropResult.removedIndex !== null) {
-
             let newColumns = [...columns]
             let currentColumn = newColumns.find(col => col.id === columnID)
 
@@ -66,10 +68,6 @@ function BoardContent() {
 
             setColumns(newColumns)
         }
-    }
-
-    const toggleOpenNewColumnForm = () => {
-        setOpenNewColumnForm(!openNewColumnForm)
     }
 
     const addNewColumn = () => {
@@ -163,7 +161,7 @@ function BoardContent() {
                                 onKeyDown={e => (e.key === 'Enter') && addNewColumn()}
                             />
                             <Button variant="success" size="sm" onClick={addNewColumn}>Add Column</Button>
-                            <span className="cancel-new-column" onClick={toggleOpenNewColumnForm}>
+                            <span className="cancel-icon" onClick={toggleOpenNewColumnForm}>
                                 <i className='icon fa fa-trash'></i>
                             </span>
                         </Col>
