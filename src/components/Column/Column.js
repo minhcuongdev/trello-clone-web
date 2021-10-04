@@ -9,11 +9,12 @@ import ConfirmModal from 'components/common/ConfirmModal'
 import { mapOrder } from 'utilities/sorts'
 import { MODAL_ACTION_CONFIRM } from 'utilities/constants'
 import { saveContentAfterEnter, selectAllInlineText } from 'utilities/contentEditable'
+import { createNewCard, updateColumn } from 'actions/API'
 
 
 function Column(props) {
-    const { column, onCardDrop, onUpdateColumn } = props
-    const cards = mapOrder(column.cards, column.cardOrder, 'id')
+    const { column, onCardDrop, onUpdateColumnState } = props
+    const cards = mapOrder(column.cards, column.cardOrder, '_id')
 
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -35,7 +36,11 @@ function Column(props) {
                 ...column,
                 _destroy: true
             }
-            onUpdateColumn(newColumn)
+
+            updateColumn(newColumn._id, newColumn)
+                .then(col => {
+                    onUpdateColumnState(col)
+                })
         }
         toggleShowConfirmModal()
     }
@@ -63,7 +68,15 @@ function Column(props) {
             ...column,
             title: columnTitle
         }
-        onUpdateColumn(newColumn)
+
+        if (column.title !== columnTitle) {
+            updateColumn(newColumn._id, newColumn)
+                .then(col => {
+                    col.cards = newColumn.cards
+                    onUpdateColumnState(col)
+                })
+        }
+
     }
 
     const addNewCart = () => {
@@ -73,20 +86,21 @@ function Column(props) {
         }
 
         const newCartToAdd = {
-            id: Math.random().toString(36).substr(2, 5),
-            boardID: column.boardID,
-            columnID: column.id,
-            title: newCartTile.trim(),
-            cover: null
+            boardId: column.boardId,
+            columnId: column._id,
+            title: newCartTile.trim()
         }
 
-        const newColumn = cloneDeep(column)
-        newColumn.cards.push(newCartToAdd)
-        newColumn.cardOrder.push(newCartToAdd.id)
+        createNewCard(newCartToAdd)
+            .then(card => {
+                let newColumn = cloneDeep(column)
+                newColumn.cards.push(card)
+                newColumn.cardOrder.push(card._id)
 
-        onUpdateColumn(newColumn)
-        setNewCartTitle('')
-        toggleOpenNewCartForm()
+                onUpdateColumnState(newColumn)
+                setNewCartTitle('')
+                toggleOpenNewCartForm()
+            })
     }
 
     return (
@@ -122,7 +136,7 @@ function Column(props) {
             <div className="card-list">
                 <Container
                     groupName="col"
-                    onDrop={dropResult => onCardDrop(column.id, dropResult)}
+                    onDrop={dropResult => onCardDrop(column._id, dropResult)}
                     getChildPayload={index => cards[index]}
                     dragClass="card-ghost"
                     dropClass="card-ghost-drop"
