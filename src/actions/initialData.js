@@ -10,7 +10,7 @@ export const initialData = {
                     title: 'To do column',
                     cardOrder: ['card-1', 'card-2', 'card-3', 'card-4', 'card-5', 'card-6', 'card-7'],
                     cards: [
-                        { id: 'card-1', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 1', cover: 'https://scontent-xsp1-3.xx.fbcdn.net/v/t1.6435-9/186476445_2851274748473229_1833304691370865343_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=iTZ3D_ogQqoAX8MpZmK&_nc_ht=scontent-xsp1-3.xx&oh=37d2ede5322aab5faa7d995fd56dc5b6&oe=61527C85' },
+                        { id: 'card-1', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 1', cover: 'https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.6435-9/186476445_2851274748473229_1833304691370865343_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Z69OlTp9t-YAX_Gn6Aa&_nc_ht=scontent.fsgn5-6.fna&oh=2d5a021bf5b41aba122817d654b11ee6&oe=617DFE05' },
                         { id: 'card-2', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 2', cover: null },
                         { id: 'card-3', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 3', cover: null },
                         { id: 'card-4', boardID: 'board-1', columnID: 'column-1', title: 'Title of card 4', cover: null },
